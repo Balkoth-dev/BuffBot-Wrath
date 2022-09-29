@@ -675,10 +675,10 @@ namespace WrathBuffBot
                                         //Helpers.Log("Line 663");
                                         if (spellbookList.Empty())
                                         {
-                                            var memorizedSpells = spellToCast.Spellbook.GetAllMemorizedSpells().Where(v => v.Spell.Name == profileSpell.ParentName).Where(o => o.Spell.GetAvailableForCastCount() > 0).Where(o => o.Spell.Spellbook != null).Where(o => o.Spell != null);
+                                            var memorizedSpells = spellToCast.Spellbook.GetAllMemorizedSpells().Where(v => v.SpellShell.Name == profileSpell.ParentName).Where(o => o.SpellShell.GetAvailableForCastCount() > 0).Where(o => o.SpellShell.Spellbook != null).Where(o => o.SpellShell != null);
                                             foreach (var m in memorizedSpells)
                                             {
-                                                spellbookList.Add(m.Spell);
+                                                spellbookList.Add(m.SpellShell);
                                             }
                                         }
                                         //Helpers.Log("Line 672");
@@ -973,22 +973,22 @@ namespace WrathBuffBot
                                 abilitiesBySpellProfile.Add(sp);
                             }
                         }
-                        foreach (var sp in spellbook.GetAllMemorizedSpells().Where(o => o.Spell.GetAvailableForCastCount() > 0))
+                        foreach (var sp in spellbook.GetAllMemorizedSpells().Where(o => o.SpellShell.GetAvailableForCastCount() > 0))
                         {
-                            AbilityVariants component = sp.Spell.Blueprint.GetComponent<AbilityVariants>();
+                            AbilityVariants component = sp.SpellShell.Blueprint.GetComponent<AbilityVariants>();
                             ReferenceArrayProxy<BlueprintAbility, BlueprintAbilityReference>? referenceArrayProxy = (component != null) ? new ReferenceArrayProxy<BlueprintAbility, BlueprintAbilityReference>?(component.Variants) : null;
                             if (referenceArrayProxy != null)
                             {
                                 foreach (var variant in referenceArrayProxy)
                                 {
                                     //Helpers.Log("Varient2 : " + variant.name);
-                                    var variantAbility = new AbilityData(variant, sp.Spell.Spellbook, sp.SpellLevel);
+                                    var variantAbility = new AbilityData(variant, sp.SpellShell.Spellbook, sp.SpellLevel);
                                     abilitiesBySpellProfile.Add(variantAbility);
                                 }
                             }
                             else
                             {
-                                abilitiesBySpellProfile.Add(sp.Spell);
+                                abilitiesBySpellProfile.Add(sp.SpellShell);
                             }
                         }
                         for (int i = 0; i <= maxSpellLevel; i++)
@@ -1585,17 +1585,17 @@ namespace WrathBuffBot
                     {
                         foreach (var s in sb.GetMemorizedSpells(i))
                         {
-                            if (s.Spell.SpellLevel != 0 && s.Spell.IsVisible())
+                            if (s.SpellShell.SpellLevel != 0 && s.SpellShell.IsVisible())
                             {
                                 if (settings.showOnlyBuffs)
                                 {
-                                    if (BuffsInAbility(s.Spell.Blueprint).Count > 0)
+                                    if (BuffsInAbility(s.SpellShell.Blueprint).Count > 0)
                                     {
-                                        allKnownSpells.Add(s.Spell);
+                                        allKnownSpells.Add(s.SpellShell);
                                     }
                                     else
                                     {
-                                        AbilityVariants component = s.Spell.Blueprint.GetComponent<AbilityVariants>();
+                                        AbilityVariants component = s.SpellShell.Blueprint.GetComponent<AbilityVariants>();
                                         ReferenceArrayProxy<BlueprintAbility, BlueprintAbilityReference>? referenceArrayProxy = (component != null) ? new ReferenceArrayProxy<BlueprintAbility, BlueprintAbilityReference>?(component.Variants) : null;
                                         if (referenceArrayProxy != null)
                                         {
@@ -1603,7 +1603,7 @@ namespace WrathBuffBot
                                             {
                                                 if (BuffsInAbility(variant).Count > 0)
                                                 {
-                                                    allKnownSpells.Add(s.Spell);
+                                                    allKnownSpells.Add(s.SpellShell);
                                                 }
                                             }
                                         }
@@ -1611,7 +1611,7 @@ namespace WrathBuffBot
                                 }
                                 else
                                 {
-                                    allKnownSpells.Add(s.Spell);
+                                    allKnownSpells.Add(s.SpellShell);
                                 }
                             }
                         }
